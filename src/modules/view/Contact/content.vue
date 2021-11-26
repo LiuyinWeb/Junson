@@ -2,7 +2,7 @@
   <div class="divBox">
     <div class="bottomBox" :class="{'bottomBoxAnimation':imgBoxAnimation}">
       <div class="opacity5">Copyright © 2011-2021 Junson Capital Company Limited. </div>
-      <div><span class="opacity5">JUNSON is a trademark of Hope Empire Limited in the United States and other countries. All Rights Reserved.</span> <span class="last"></span><span class="legalLinke" @click="legal">Legal</span></div>
+      <div><span class="opacity5">JUNSON is a trademark of Hope Empire Limited in the United States and other countries. All Rights Reserved.</span> <span class="last"></span><span class="legalLinke" @click="legal">Legal</span> <span class="last"></span><span class="legalLinke" @click="privacy">privacy</span></div>
     </div>
     <div :class="[{ 'imgBox-animation': imgBoxAnimation}]" class="imgBoxDiv">
       <div class="imgBox">
@@ -52,6 +52,9 @@ export default {
       },
       legal(){
         this.$emit('change','1')
+      },
+      privacy(){
+        this.$emit('change','2')
       }
     },
 }

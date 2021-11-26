@@ -1,17 +1,22 @@
 <template>
-  <div class="htmlDiv"
-      v-loading="showLoading"
+<div
+    class="loadBox"
+    v-loading="showLoading"
     element-loading-text="loading..."
-    element-loading-background="rgba(0, 0, 0, 0.8)"
+    element-loading-background="rgba(0, 0, 0, 1)"
     element-loading-spinner="el-icon-loading">
+  <div class="htmlDiv" v-if="heightChange">
     <img class="logoDiv" src="@img/logo_junson@2x.png" alt="">
     <header>
       <div class="nav-container">
          <el-tabs ref="navTabs" v-model="activeName" @tab-click="handleClick">
             <el-tab-pane label="HOME" name="0">
+              <!-- <div class="bottomLine"></div> -->
             </el-tab-pane>
             <el-tab-pane label="ABOUT" name="1"></el-tab-pane>
-            <el-tab-pane label="PHILOSOPHY" name="2"></el-tab-pane>
+            <el-tab-pane label="PHILOSOPHY" name="2">
+              <!-- <div class="bottomLine"></div> -->
+              </el-tab-pane>
             <el-tab-pane label="CULTURE" name="3"></el-tab-pane>
             <el-tab-pane label="CONTACT" name="4"></el-tab-pane>
           </el-tabs>
@@ -34,6 +39,7 @@
        <Contact id="page4" ref="ContactPage" @pageChange="pageChange"></Contact>
     </main>
   </div>
+</div>
 </template>
 
 <script>
@@ -70,6 +76,8 @@ export default {
       ],
       homeDom : null,
       clientHeight:'',
+      heightChange:true,
+      setTime2:false,
     };
   },
   watch:{
@@ -92,17 +100,32 @@ export default {
         }, 500);
       }
      },
+     clientHeight(val, oldVal){
+       if(val !== oldVal){
+          this.showLoading=true;
+          this.heightChange=false;
+          this.heightChange=true;
+          this.scrollTo(-this.clientHeight*(Number(this.activeName)))
+          setTimeout(()=>{
+            this.showLoading=false;
+          },500)
+       }
+     },
   },
   mounted() {
     this.homeDom = document.getElementById('main')
     this.clientHeight = window.innerHeight;
-      /*注册事件*/
+      setTimeout(()=>{
+        this.setTime2 = true;
+      },3000)
+        /*注册事件*/
       if(document.addEventListener){
           document.addEventListener('DOMMouseScroll',this.scrollFunc,false);
       }//W3C
-          window.addEventListener("resize", ()=>{
-            this.clientHeight = window.innerHeight;
-          });
+      window.addEventListener("resize", ()=>{
+        this.activeName = String(this.activeName)
+        this.clientHeight = window.innerHeight;
+     });
       console.log(this.clientHeight)
       window.onmousewheel=document.onmousewheel=this.scrollFunc;//IE/Opera/Chrome
       this.loadImages(this.urlArr)
@@ -177,12 +200,12 @@ export default {
     },
     scrollFunc(e){
         e=e || window.event;
-        if (e.deltaY > 0 && !this.isScroll) {
+        if (e.deltaY > 0 && !this.isScroll && this.setTime2) {
             // 向下
             switch (this.activeName){
               case '0':
-                this.activeName = '1'
-                this.downScroll()
+                  this.activeName = '1'
+                  this.downScroll()
                 break;
               case '1':
                 this.$refs.AboutPage.scrollF(1)
@@ -201,7 +224,7 @@ export default {
             setTimeout(() => {
                 this.isScroll = false;
             }, 500);
-        }else if (e.deltaY < 0  && !this.isScroll) {
+        }else if (e.deltaY < 0  && !this.isScroll && this.setTime2) {
             switch (this.activeName){
               case '0':
                 break;
@@ -232,7 +255,16 @@ export default {
   }
 };
 </script>
-
+<style lang="scss">
+.el-tabs__active-bar:after{
+      content:"12222222";
+      margin-left: calc((100% - 40px)/2 );
+      display: inline-block;
+      width:40px!important;
+      height:2Px;
+      background: #DAB56E;
+    }
+</style>
 <style lang="scss" scoped>
    /deep/ .el-loading-text, /deep/.el-loading-spinner i{
       color: #fff!important;
@@ -259,6 +291,10 @@ export default {
 html,body,div,span,p{
   font-family:HarmonyOS Sans SC
 }
+.loadBox{
+  height:100vh;
+  width:100vw;
+}
 .htmlDiv{
   height:100vh;
   width:100vw;
@@ -276,7 +312,13 @@ html,body,div,span,p{
   color:#DAB56E
 }
 /deep/.el-tabs__active-bar{
-    background: #DAB56E;
+    background: none;
+    // width: calc(40px!important;)
+}
+.bottomLine{
+  width:40px;
+  height:2Px;
+  background: #DAB56E;
 }
 /deep/.el-tabs__item{
   color:#fff;
