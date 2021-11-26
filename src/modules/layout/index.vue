@@ -288,7 +288,7 @@ html,body,div,span,p{
 }
 @keyframes tabs__item-change {
   0% { 
-    margin-right: 100px;
+    margin-right: 100px; 
   } 
   100% {
     margin-right: 0px;
